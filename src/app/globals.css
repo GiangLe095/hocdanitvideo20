@@ -1,11 +1,15 @@
+/* Import Tailwind CSS utilities */
 @import "tailwindcss";
+/* Import Bootstrap CSS */
 @import "bootstrap/dist/css/bootstrap.min.css";
 
+/* Định nghĩa biến màu toàn cục */
 :root {
   --background: #ffffff;
   --foreground: #171717;
 }
 
+/* Tự động chuyển màu khi ở chế độ dark mode */
 @media (prefers-color-scheme: dark) {
   :root {
     --background: #0a0a0a;
@@ -13,8 +17,60 @@
   }
 }
 
+/* Thiết lập style mặc định cho body */
 body {
-  background: #fff !important;
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: #fff !important; /* Màu nền trắng */
+  color: var(--foreground);    /* Màu chữ lấy từ biến */
+  font-family: Arial, Helvetica, sans-serif; /* Font chữ mặc định */
+}
+
+/* ===== Style cho header ===== */
+.custom-header {
+  display: flex; /* Sử dụng flexbox để chia 3 phần */
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 24px;
+  background: #fff;
+  border-bottom: 1px solid #eee;
+}
+
+.header-left .site-title {
+  font-weight: bold;
+  font-size: 1.3rem;
+}
+
+.header-center {
+  display: flex;
+  gap: 24px; /* Khoảng cách giữa các tab */
+}
+
+.header-center .nav-link {
+  text-decoration: none;
+  color: #333;
+  font-weight: 500;
+  padding: 4px 8px;
+  border-radius: 4px;
+  transition: color 0.2s;
+}
+
+.header-center .nav-link.active {
+  color: #1976d2; /* Màu xanh khi active */
+  border-bottom: 2px solid #1976d2;
+  font-weight: bold;
+}
+
+.header-center .nav-link:hover {
+  color: #1976d2; /* Hover đổi màu xanh */
+}
+
+.header-right .logo-main {
+  text-align: right;
+  color: #1976d2;
+  font-weight: bold;
+  font-size: 1.1rem;
+  line-height: 1.1;
+}
+.header-right .logo-sub {
+  color: #e53935;
+  font-size: 0.9rem;
 }

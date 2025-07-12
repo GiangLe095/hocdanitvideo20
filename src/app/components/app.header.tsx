@@ -1,27 +1,42 @@
 "use client";
-import { Navbar, Nav, NavDropdown, Container } from "react-bootstrap";
+// Import Link để điều hướng nội bộ, usePathname để lấy đường dẫn hiện tại
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import "../globals.css";
+
+// Mảng các tab điều hướng
+const navItems = [
+  { label: "Blogs", path: "/blogs" },
+  { label: "Facebook", path: "/facebook" },
+  { label: "Tiktok", path: "/tiktok" },
+  { label: "Youtube", path: "/youtube" },
+  { label: "Link", path: "/link" },
+];
 
 export default function AppHeader() {
+  // Lấy đường dẫn hiện tại để xác định tab nào đang active
+  const pathname = usePathname();
+
   return (
-    <Navbar bg="light" expand="lg" style={{ border: "none", boxShadow: "none", marginBottom: 0 }}>
-      <Container>
-        <Navbar.Brand href="#home" style={{ fontWeight: 500, fontSize: 28, letterSpacing: 0.5 }}>
-          React-Bootstrap
-        </Navbar.Brand>
-        <Navbar.Toggle aria-controls="basic-navbar-nav" />
-        <Navbar.Collapse id="basic-navbar-nav">
-          <Nav className="me-auto">
-            <Nav.Link href="#home">Home</Nav.Link>
-            <Nav.Link href="#link">Link</Nav.Link>
-            <NavDropdown title="Dropdown" id="basic-nav-dropdown">
-              <NavDropdown.Item href="#action/1">Action</NavDropdown.Item>
-              <NavDropdown.Item href="#action/2">Another action</NavDropdown.Item>
-              <NavDropdown.Divider />
-              <NavDropdown.Item href="#action/3">Something else</NavDropdown.Item>
-            </NavDropdown>
-          </Nav>
-        </Navbar.Collapse>
-      </Container>
-    </Navbar>
+    // Header chia 3 phần: trái (logo), giữa (tab), phải (logo phụ - đã bỏ)
+    <header className="custom-header">
+      <div className="header-left">
+        {/* Logo, bấm vào sẽ về trang chủ */}
+        <Link href="/" className="site-title">Hỏi Dân IT</Link>
+      </div>
+      <nav className="header-center">
+        {/* Duyệt qua từng tab và render Link, tab nào trùng pathname sẽ active */}
+        {navItems.map((item) => (
+          <Link
+            key={item.path}
+            href={item.path}
+            className={`nav-link${pathname === item.path ? " active" : ""}`}
+            scroll={false}
+          >
+            {item.label}
+          </Link>
+        ))}
+      </nav>
+    </header>
   );
 } 
