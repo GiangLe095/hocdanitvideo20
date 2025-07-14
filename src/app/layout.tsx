@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import AppHeader from "./components/app.header";
 import AppFooter from "./components/app.footer";
+import { siteConfig } from "../config/site";
 
 // ========================================
 // FONT CONFIGURATION
@@ -17,23 +18,23 @@ const inter = Inter({ subsets: ["latin"], display: 'swap' });
 // ========================================
 // Metadata cho SEO và social media preview
 export const metadata: Metadata = {
-  title: "Hỏi Dân IT - Blog Management System",
-  description: "Hệ thống quản lý blog hiện đại với Next.js, React và TypeScript. Tạo, chỉnh sửa và quản lý blog một cách dễ dàng.",
+  title: `${siteConfig.name} - Blog Management System`,
+  description: siteConfig.description,
   
   // ========================================
   // OPEN GRAPH TAGS (Facebook, WhatsApp, Telegram, Discord)
   // ========================================
   openGraph: {
-    title: "Hỏi Dân IT - Blog Management System",
-    description: "Hệ thống quản lý blog hiện đại với Next.js, React và TypeScript. Tạo, chỉnh sửa và quản lý blog một cách dễ dàng.",
-    url: "https://your-domain.com", // Thay bằng domain thực của bạn
-    siteName: "Hỏi Dân IT",
+    title: `${siteConfig.name} - Blog Management System`,
+    description: siteConfig.description,
+    url: siteConfig.domain,
+    siteName: siteConfig.name,
     images: [
       {
-        url: "https://your-domain.com/og-image.jpg", // Thay bằng URL ảnh thực
+        url: siteConfig.getImageUrl(siteConfig.images.main),
         width: 1200,
         height: 630,
-        alt: "Hỏi Dân IT - Blog Management System",
+        alt: `${siteConfig.name} - Blog Management System`,
       },
     ],
     locale: "vi_VN",
@@ -45,19 +46,19 @@ export const metadata: Metadata = {
   // ========================================
   twitter: {
     card: "summary_large_image",
-    title: "Hỏi Dân IT - Blog Management System",
-    description: "Hệ thống quản lý blog hiện đại với Next.js, React và TypeScript.",
-    images: ["https://your-domain.com/twitter-image.jpg"], // Thay bằng URL ảnh thực
-    creator: "@hoidanit", // Thay bằng Twitter handle thực
+    title: `${siteConfig.name} - Blog Management System`,
+    description: siteConfig.description,
+    images: [siteConfig.getImageUrl(siteConfig.images.main)],
+    creator: siteConfig.social.twitter,
   },
   
   // ========================================
   // ADDITIONAL SEO TAGS
   // ========================================
-  keywords: ["blog", "management", "nextjs", "react", "typescript", "web development"],
-  authors: [{ name: "Hỏi Dân IT" }],
-  creator: "Hỏi Dân IT",
-  publisher: "Hỏi Dân IT",
+  keywords: siteConfig.keywords,
+  authors: [{ name: siteConfig.name }],
+  creator: siteConfig.name,
+  publisher: siteConfig.name,
   robots: {
     index: true,
     follow: true,

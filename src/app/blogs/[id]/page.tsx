@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import BlogDetailClient from './BlogDetailClient';
+import { siteConfig } from '../../../config/site';
 
 interface Blog {
   id: number;
@@ -16,9 +17,9 @@ export async function generateMetadata({ params }: { params: { id: string } }): 
   const blog = blogs && blogIndex >= 0 && blogIndex < blogs.length ? blogs[blogIndex] : null;
   
   if (blog) {
-    const title = `${blog.title} | Hỏi Dân IT`;
+    const title = `${blog.title} | ${siteConfig.name}`;
     const description = blog.content?.slice(0, 150) || 'Xem chi tiết bài viết blog.';
-    const imageUrl = `https://your-domain.com/blog-${blog.id}-image.jpg`; // Thay bằng URL ảnh thực
+    const imageUrl = siteConfig.getBlogImageUrl(blog.id);
     
     return {
       title,
@@ -30,8 +31,8 @@ export async function generateMetadata({ params }: { params: { id: string } }): 
       openGraph: {
         title,
         description,
-        url: `https://your-domain.com/blogs/${params.id}`,
-        siteName: "Hỏi Dân IT",
+        url: siteConfig.getBlogUrl(params.id),
+        siteName: siteConfig.name,
         images: [
           {
             url: imageUrl,
@@ -54,23 +55,23 @@ export async function generateMetadata({ params }: { params: { id: string } }): 
         title,
         description,
         images: [imageUrl],
-        creator: "@hoidanit",
+        creator: siteConfig.social.twitter,
       },
     };
   }
   
   return {
-    title: 'Blog Not Found | Hỏi Dân IT',
+    title: `Blog Not Found | ${siteConfig.name}`,
     description: 'Không tìm thấy blog.',
     openGraph: {
-      title: 'Blog Not Found | Hỏi Dân IT',
+      title: `Blog Not Found | ${siteConfig.name}`,
       description: 'Không tìm thấy blog.',
-      url: `https://your-domain.com/blogs/${params.id}`,
-      siteName: "Hỏi Dân IT",
+      url: siteConfig.getBlogUrl(params.id),
+      siteName: siteConfig.name,
     },
     twitter: {
       card: "summary",
-      title: 'Blog Not Found | Hỏi Dân IT',
+      title: `Blog Not Found | ${siteConfig.name}`,
       description: 'Không tìm thấy blog.',
     },
   };
