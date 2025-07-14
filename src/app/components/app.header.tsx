@@ -1,37 +1,62 @@
 "use client";
-// Import Link để điều hướng nội bộ, usePathname để lấy đường dẫn hiện tại
-import Link from "next/link";
-import { usePathname } from "next/navigation";
-import "../globals.css";
 
-// Mảng các tab điều hướng
-const navItems = [
-  { label: "Blogs", path: "/blogs" },
-  { label: "Facebook", path: "/facebook" },
-  { label: "Tiktok", path: "/tiktok" },
-  { label: "Youtube", path: "/youtube" },
-  { label: "Link", path: "/link" },
-];
+// ========================================
+// IMPORTS & DEPENDENCIES
+// ========================================
+import Link from "next/link"; // Next.js Link component cho navigation
+import { usePathname } from "next/navigation"; // Hook để lấy current path
 
+// ========================================
+// HEADER COMPONENT
+// ========================================
+// Component header chứa navigation menu
+// - Logo/Brand name
+// - Navigation links
+// - Active state cho current page
 export default function AppHeader() {
-  // Lấy đường dẫn hiện tại để xác định tab nào đang active
+  // ========================================
+  // HOOKS & STATE
+  // ========================================
+  // Lấy current pathname để highlight active link
   const pathname = usePathname();
 
+  // ========================================
+  // NAVIGATION DATA
+  // ========================================
+  // Mảng chứa thông tin các navigation links
+  const navItems = [
+    { href: "/blogs", label: "Blogs" },
+    { href: "/facebook", label: "Facebook" },
+    { href: "/tiktok", label: "Tiktok" },
+    { href: "/youtube", label: "Youtube" },
+    { href: "/link", label: "Link" },
+  ];
+
+  // ========================================
+  // RENDER NAVIGATION
+  // ========================================
   return (
-    // Header chia 3 phần: trái (logo), giữa (tab), phải (logo phụ - đã bỏ)
     <header className="custom-header">
+      {/* ========================================
+          HEADER LEFT - BRAND/LOGO
+          ======================================== */}
       <div className="header-left">
-        {/* Logo, bấm vào sẽ về trang chủ */}
-        <Link href="/" className="site-title">Hỏi Dân IT</Link>
+        {/* Logo/Brand name với link về homepage */}
+        <Link className="site-title" href="/">
+          Hỏi Dân IT
+        </Link>
       </div>
+
+      {/* ========================================
+          HEADER CENTER - NAVIGATION MENU
+          ======================================== */}
       <nav className="header-center">
-        {/* Duyệt qua từng tab và render Link, tab nào trùng pathname sẽ active */}
+        {/* Render từng navigation link */}
         {navItems.map((item) => (
           <Link
-            key={item.path}
-            href={item.path}
-            className={`nav-link${pathname === item.path ? " active" : ""}`}
-            scroll={false}
+            key={item.href}
+            className={`nav-link ${pathname === item.href ? "active" : ""}`}
+            href={item.href}
           >
             {item.label}
           </Link>
