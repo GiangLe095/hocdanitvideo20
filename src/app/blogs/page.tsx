@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import useSWR, { mutate } from "swr";
-import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -15,6 +15,7 @@ interface Blog {
 }
 
 export default function BlogsPage() {
+  const router = useRouter();
   // SWR fetch blogs
   const fetcher = (url: string) => fetch(url).then(res => res.json());
   const { data: blogs, error, isLoading } = useSWR<Blog[]>("http://localhost:8000/blogs", fetcher);
@@ -23,7 +24,6 @@ export default function BlogsPage() {
   // State lưu thông tin blog mới đang nhập
   const [newBlog, setNewBlog] = useState({ title: "", author: "", content: "" });
   // Thêm các state quản lý modal View/Edit và blog đang thao tác
-  const [viewBlog, setViewBlog] = useState<Blog | null>(null);
   const [editBlog, setEditBlog] = useState<Blog | null>(null);
   const [editForm, setEditForm] = useState({ title: "", author: "", content: "" });
   const [deletingId, setDeletingId] = useState<number | null>(null);
@@ -65,10 +65,10 @@ export default function BlogsPage() {
     }
   };
 
-  // Hàm mở modal View
-  const handleView = (blog: Blog) => setViewBlog(blog);
-  // Hàm đóng modal View
-  const handleCloseView = () => setViewBlog(null);
+  // Hàm navigate đến trang chi tiết blog (sử dụng index thay vì ID)
+  const handleView = (blog: Blog, index: number) => {
+    router.push(`/blogs/${index + 1}`);
+  };
 
   // Hàm mở modal Edit
   const handleEdit = (blog: Blog) => {
@@ -164,7 +164,7 @@ export default function BlogsPage() {
                 <td style={{ border: "1px solid #ccc", padding: 8 }}>{blog.title}</td>
                 <td style={{ border: "1px solid #ccc", padding: 8 }}>{blog.author}</td>
                 <td style={{ border: "1px solid #ccc", padding: 8 }}>
-                  <button style={{ background: "#2196f3", color: "#fff", border: "none", borderRadius: 4, marginRight: 4, padding: "4px 12px" }} onClick={() => handleView(blog)}>View</button>
+                  <button style={{ background: "#2196f3", color: "#fff", border: "none", borderRadius: 4, marginRight: 4, padding: "4px 12px" }} onClick={() => handleView(blog, idx)}>View</button>
                   <button style={{ background: "#ffc107", color: "#fff", border: "none", borderRadius: 4, marginRight: 4, padding: "4px 12px" }} onClick={() => handleEdit(blog)}>Edit</button>
                   <button style={{ background: "#f44336", color: "#fff", border: "none", borderRadius: 4, padding: "4px 12px" }} onClick={() => handleDelete(blog.id)} disabled={deletingId === blog.id}>{deletingId === blog.id ? "Đang xóa..." : "Delete"}</button>
                 </td>
@@ -214,20 +214,6 @@ export default function BlogsPage() {
             <div style={{ display: "flex", justifyContent: "flex-end", gap: 8 }}>
               <button onClick={handleClose} style={{ padding: "6px 16px" }}>Cancel</button>
               <button onClick={handleSave} style={{ background: "#2196f3", color: "#fff", border: "none", borderRadius: 4, padding: "6px 16px" }}>Save</button>
-            </div>
-          </div>
-        </div>
-      )}
-      {/* Modal xem chi tiết blog */}
-      {viewBlog && (
-        <div style={{ position: "fixed", top: 0, left: 0, width: "100vw", height: "100vh", background: "rgba(0,0,0,0.3)", display: "flex", alignItems: "center", justifyContent: "center" }}>
-          <div style={{ background: "#fff", padding: 24, borderRadius: 8, minWidth: 320, maxWidth: 400, position: "relative" }}>
-            <h3 style={{ marginTop: 0 }}>Blog Details</h3>
-            <div><b>Title:</b> {viewBlog.title}</div>
-            <div><b>Author:</b> {viewBlog.author}</div>
-            <div><b>Content:</b> <div style={{ whiteSpace: "pre-wrap" }}>{viewBlog.content}</div></div>
-            <div style={{ display: "flex", justifyContent: "flex-end", marginTop: 16 }}>
-              <button onClick={handleCloseView} style={{ padding: "6px 16px" }}>Close</button>
             </div>
           </div>
         </div>
