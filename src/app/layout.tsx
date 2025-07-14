@@ -15,10 +15,60 @@ const inter = Inter({ subsets: ["latin"], display: 'swap' });
 // ========================================
 // METADATA CONFIGURATION
 // ========================================
-// Metadata cho SEO và browser tab
+// Metadata cho SEO và social media preview
 export const metadata: Metadata = {
-  title: "React-Bootstrap Demo",        // Tiêu đề trang web
-  description: "Demo layout",           // Mô tả trang web
+  title: "Hỏi Dân IT - Blog Management System",
+  description: "Hệ thống quản lý blog hiện đại với Next.js, React và TypeScript. Tạo, chỉnh sửa và quản lý blog một cách dễ dàng.",
+  
+  // ========================================
+  // OPEN GRAPH TAGS (Facebook, WhatsApp, Telegram, Discord)
+  // ========================================
+  openGraph: {
+    title: "Hỏi Dân IT - Blog Management System",
+    description: "Hệ thống quản lý blog hiện đại với Next.js, React và TypeScript. Tạo, chỉnh sửa và quản lý blog một cách dễ dàng.",
+    url: "https://your-domain.com", // Thay bằng domain thực của bạn
+    siteName: "Hỏi Dân IT",
+    images: [
+      {
+        url: "https://your-domain.com/og-image.jpg", // Thay bằng URL ảnh thực
+        width: 1200,
+        height: 630,
+        alt: "Hỏi Dân IT - Blog Management System",
+      },
+    ],
+    locale: "vi_VN",
+    type: "website",
+  },
+  
+  // ========================================
+  // TWITTER CARD TAGS
+  // ========================================
+  twitter: {
+    card: "summary_large_image",
+    title: "Hỏi Dân IT - Blog Management System",
+    description: "Hệ thống quản lý blog hiện đại với Next.js, React và TypeScript.",
+    images: ["https://your-domain.com/twitter-image.jpg"], // Thay bằng URL ảnh thực
+    creator: "@hoidanit", // Thay bằng Twitter handle thực
+  },
+  
+  // ========================================
+  // ADDITIONAL SEO TAGS
+  // ========================================
+  keywords: ["blog", "management", "nextjs", "react", "typescript", "web development"],
+  authors: [{ name: "Hỏi Dân IT" }],
+  creator: "Hỏi Dân IT",
+  publisher: "Hỏi Dân IT",
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
+  },
 };
 
 // ========================================
