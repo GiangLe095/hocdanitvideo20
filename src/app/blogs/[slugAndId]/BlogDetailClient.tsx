@@ -17,7 +17,7 @@ export default function BlogDetailClient({ blog, blogIndex }: { blog: Blog | nul
         <div className="text-center">
           <div className="text-gray-400 text-6xl mb-4">📄</div>
           <h1 className="text-2xl font-bold text-gray-900 mb-2">Blog Not Found</h1>
-          <p className="text-gray-600 mb-4">The blog you're looking for doesn't exist.</p>
+          <p className="text-gray-600 mb-4">The blog you&apos;re looking for doesn&apos;t exist.</p>
           <Link
             href="/blogs"
             className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors"

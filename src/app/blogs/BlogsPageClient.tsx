@@ -16,7 +16,8 @@ interface Blog {
 export default function BlogsPageClient() {
   // SWR fetch blogs
   const fetcher = (url: string) => fetch(url).then(res => res.json());
-  const { data: blogs, error, isLoading } = useSWR<Blog[]>("http://localhost:8000/blogs", fetcher);
+  const API_URL = "http://localhost:8000";
+  const { data: blogs, error, isLoading } = useSWR<Blog[]>(`${API_URL}/blogs`, fetcher);
   // State điều khiển hiển thị modal
   const [showModal, setShowModal] = useState(false);
   // State lưu thông tin blog mới đang nhập
@@ -41,7 +42,7 @@ export default function BlogsPageClient() {
   const handleSave = async () => {
     if (newBlog.title.trim() && newBlog.author.trim()) {
       try {
-        const res = await fetch("http://localhost:8000/blogs", {
+        const res = await fetch(`${API_URL}/blogs`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
@@ -54,8 +55,8 @@ export default function BlogsPageClient() {
         toast.success("Lưu thành công!", { toastId: "blog-toast-success" });
         handleClose();
         // Gọi mutate để revalidate lại danh sách blogs
-        mutate("http://localhost:8000/blogs");
-      } catch (err) {
+        mutate(`${API_URL}/blogs`);
+      } catch {
         toast.error("Gửi dữ liệu thất bại!", { toastId: "blog-toast-error", position: "top-center" });
       }
     } else {
@@ -65,8 +66,21 @@ export default function BlogsPageClient() {
 
   // Hàm navigate đến trang chi tiết blog (sử dụng index thay vì ID)
   const router = useRouter();
-  const handleView = (blog: Blog, index: number) => {
-    router.push(`/blogs/${index + 1}`);
+  // Hàm tạo slug từ title
+  function slugify(str: string) {
+    return str
+      .toString()
+      .toLowerCase()
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '') // xóa dấu tiếng Việt
+      .replace(/đ/g, 'd') // chuyển đ thành d
+      .replace(/[^a-z0-9]+/g, '-') // thay ký tự không phải chữ/số bằng -
+      .replace(/^-+|-+$/g, ''); // bỏ dấu - ở đầu/cuối
+  }
+  const handleView = (blog: Blog) => {
+    const slug = slugify(blog.title);
+    console.log('slug:', slug); // kiểm tra slug
+    router.push(`/blogs/${slug}-${blog.id}`);
   };
 
   // Hàm mở modal Edit
@@ -88,7 +102,7 @@ export default function BlogsPageClient() {
     if (!editBlog) return;
     if (editForm.title.trim() && editForm.author.trim()) {
       try {
-        const res = await fetch(`http://localhost:8000/blogs/${editBlog.id}`, {
+        const res = await fetch(`${API_URL}/blogs/${editBlog.id}`, {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(editForm),
@@ -96,8 +110,8 @@ export default function BlogsPageClient() {
         if (!res.ok) throw new Error("Cập nhật thất bại");
         toast.success("Cập nhật thành công!", { toastId: "blog-toast-edit-success" });
         handleCloseEdit();
-        mutate("http://localhost:8000/blogs");
-      } catch (err) {
+        mutate(`${API_URL}/blogs`);
+      } catch {
         toast.error("Cập nhật thất bại!", { toastId: "blog-toast-edit-error", position: "top-center" });
       }
     } else {
@@ -108,11 +122,11 @@ export default function BlogsPageClient() {
   const handleDelete = (id: number, index: number) => {
     if (window.confirm(`Bạn có chắc chắn muốn xóa blog số ${index + 1} này?`)) {
       setDeletingId(id);
-      fetch(`http://localhost:8000/blogs/${id}`, { method: "DELETE" })
+      fetch(`${API_URL}/blogs/${id}`, { method: "DELETE" })
         .then(res => {
           if (!res.ok) throw new Error();
           toast.success("Xóa thành công!", { toastId: "blog-toast-delete-success" });
-          mutate("http://localhost:8000/blogs");
+          mutate(`${API_URL}/blogs`);
         })
         .catch(() => {
           toast.error("Xóa thất bại!", { toastId: "blog-toast-delete-error", position: "top-center" });
@@ -173,7 +187,7 @@ export default function BlogsPageClient() {
                   <td style={{ border: "1px solid #ccc", padding: 8 }}>
                     <button 
                       style={{ background: "#2196f3", color: "#fff", border: "none", borderRadius: 4, marginRight: 4, padding: "4px 12px" }} 
-                      onClick={() => handleView(blog, idx)}
+                      onClick={() => handleView(blog)}
                       aria-label={`Xem chi tiết blog: ${blog.title}`}
                     >
                       View
